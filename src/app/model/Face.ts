@@ -1,4 +1,5 @@
 import { Cubelet } from './Cubelet';
+import { Cube } from './Cube';
 
 import * as THREE from 'three';
 
@@ -7,17 +8,27 @@ export class Face {
 
     private center: THREE.Object3D;
 
-    constructor(cubelets: Array<Cubelet>, center: THREE.Vector3) {
+    private parent: Cube;
+
+    constructor(cubelets: Array<Cubelet>, center: THREE.Vector3, parent: Cube) {
 
         this.cubelets = cubelets;
-        this.center = center;
+        this.center = new THREE.Object3D();
+        this.center.position.x = center.x;
+        this.center.position.y = center.y;
+        this.center.position.z = center.z;
+
+        this.parent = parent;
 
     }
 
     rotateY(t: number) {
+
+        var vector = new THREE.Vector3(1, 1, 1);
+
         for (var c of this.cubelets) {
-            this.center.add(c.mesh);
+            c.mesh.rotateX(0.4);
         }
-        this.center.rotateY(t);
+
     }
 }

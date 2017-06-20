@@ -19,18 +19,17 @@ export class Cube {
         this.cubelets = this.createAllCubelets();
         
         var faceCubelets = this.getFace1Cubelets();
-        var o: THREE.Object3D;
-        var f1: Face = new Face(faceCubelets, o);
+        var f1: Face = new Face(faceCubelets, new THREE.Vector3(0, 1.5, 0), this);
 
         var faceCubelets = this.getFace2Cubelets();
-        var f2 = new Face(faceCubelets, new THREE.Vector3(0, 0, 1.5));
+        var f2 = new Face(faceCubelets, new THREE.Vector3(0, 0, 1.5), this);
 
 
         for (var c of this.cubelets) {
             this.root.add(c.mesh);
         }
 
-        f1.rotateY(0.3);
+        f1.rotateY(0.2);
 
     }
 
