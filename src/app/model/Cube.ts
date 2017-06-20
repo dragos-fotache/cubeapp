@@ -17,16 +17,21 @@ export class Cube {
         this.faces = new Array<Face>();
 
         this.cubelets = this.createAllCubelets();
-
+        
         var faceCubelets = this.getFace1Cubelets();
-        var f: Face = new Face(faceCubelets);
-        f.root.rotateY(0.3);
-        this.root.add(f.root);
+        var o: THREE.Object3D;
+        var f1: Face = new Face(faceCubelets, o);
 
-        faceCubelets = this.getFace2Cubelets();
-        f = new Face(faceCubelets);
-        // f.root.rotation.z = 0.3;
-        this.root.add(f.root);
+        var faceCubelets = this.getFace2Cubelets();
+        var f2 = new Face(faceCubelets, new THREE.Vector3(0, 0, 1.5));
+
+
+        for (var c of this.cubelets) {
+            this.root.add(c.mesh);
+        }
+
+        f1.rotateY(0.3);
+
     }
 
     private getFace1Cubelets(): Array<Cubelet> {

@@ -59,7 +59,7 @@ export class Graphics {
 
     public update() {
         // this.cube.mesh.rotation.x += 0.01;
-        this.cube.root.rotation.y += -0.01;
+        // this.cube.root.rotation.y += -0.01;
     }
 
 }
