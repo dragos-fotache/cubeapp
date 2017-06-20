@@ -5,7 +5,7 @@ import { FaceColor } from './FaceColor';
 import * as THREE from 'three';
 
 export class Cube {
-    private faces: Array<Face>;
+    public faces: Array<Face>;
 
     public root: THREE.Group;
 
@@ -17,19 +17,14 @@ export class Cube {
         this.faces = new Array<Face>();
 
         this.cubelets = this.createAllCubelets();
-        
-        var faceCubelets = this.getFace1Cubelets();
-        var f1: Face = new Face(faceCubelets, new THREE.Vector3(0, 1.5, 0), this);
 
-        var faceCubelets = this.getFace2Cubelets();
-        var f2 = new Face(faceCubelets, new THREE.Vector3(0, 0, 1.5), this);
-
+        this.faces.push(new Face(this.getFace1Cubelets()));
+        this.faces.push(new Face(this.getFace2Cubelets()));
+        this.faces.push(new Face(this.getFace3Cubelets()));
 
         for (var c of this.cubelets) {
             this.root.add(c.mesh);
         }
-
-        f1.rotateY(0.2);
 
     }
 
@@ -60,9 +55,30 @@ export class Cube {
         faceCubelets.push(this.cubelets[8]);
         faceCubelets.push(this.cubelets[10]);
         faceCubelets.push(this.cubelets[11]);
+        faceCubelets.push(this.cubelets[12]);
+        faceCubelets.push(this.cubelets[13]);
+        faceCubelets.push(this.cubelets[14]);
 
         return faceCubelets;
     }
+
+    private getFace3Cubelets(): Array<Cubelet> {
+
+        var faceCubelets = new Array<Cubelet>();
+
+        faceCubelets.push(this.cubelets[6]);
+        faceCubelets.push(this.cubelets[3]);
+        faceCubelets.push(this.cubelets[5]);
+        faceCubelets.push(this.cubelets[11]);
+        faceCubelets.push(this.cubelets[12]);
+        faceCubelets.push(this.cubelets[15]);
+        faceCubelets.push(this.cubelets[16]);
+        faceCubelets.push(this.cubelets[17]);
+        faceCubelets.push(this.cubelets[18]);
+
+        return faceCubelets;
+    }
+
 
     private createAllCubelets(): Array<Cubelet> {
 
@@ -150,12 +166,70 @@ export class Cube {
         c.mesh.rotation.z = Math.PI / 2;
         cubelets[11] = c;
 
+        c = new Cubelet(FaceColor.GREEN, FaceColor.YELLOW, FaceColor.BLACK, FaceColor.BLACK, FaceColor.ORANGE);
+        c.mesh.position.x = -1;
+        c.mesh.position.y = -1;
+        c.mesh.position.z = 1;
+        c.mesh.rotation.x = Math.PI / 2;
+        cubelets[12] = c;
 
+        c = new Cubelet(FaceColor.GREEN, FaceColor.RED, FaceColor.BLACK, FaceColor.BLACK, FaceColor.YELLOW);
+        c.mesh.position.x = 1;
+        c.mesh.position.y = -1;
+        c.mesh.position.z = 1;
+        c.mesh.rotation.y = Math.PI / 2;
+        c.mesh.rotation.x = Math.PI / 2;
+        cubelets[13] = c;
+
+        c = new Cubelet(FaceColor.GREEN, FaceColor.YELLOW);
+        c.mesh.position.x = 0;
+        c.mesh.position.y = -1;
+        c.mesh.position.z = 1;
+        c.mesh.rotation.x = Math.PI / 2;
+        cubelets[14] = c;
+
+        c = new Cubelet(FaceColor.ORANGE);
+        c.mesh.position.x = -1;
+        c.mesh.position.y = 0;
+        c.mesh.position.z = 0;
+        c.mesh.rotation.z = Math.PI / 2;
+        cubelets[15] = c;
+
+        c = new Cubelet(FaceColor.BLUE, FaceColor.ORANGE);
+        c.mesh.position.x = -1;
+        c.mesh.position.y = 0;
+        c.mesh.position.z = -1;
+        c.mesh.rotation.z = Math.PI / 2;
+        c.mesh.rotation.y = -Math.PI / 2;
+        cubelets[16] = c;
+
+        c = new Cubelet(FaceColor.ORANGE, FaceColor.YELLOW);
+        c.mesh.position.x = -1;
+        c.mesh.position.y = -1;
+        c.mesh.position.z = 0;
+        c.mesh.rotation.z = Math.PI / 2;
+        c.mesh.rotation.x = Math.PI / 2;
+        cubelets[17] = c;
+
+        c = new Cubelet(FaceColor.ORANGE, FaceColor.YELLOW, FaceColor.BLACK, FaceColor.BLACK, FaceColor.BLUE);
+        c.mesh.position.x = -1;
+        c.mesh.position.y = -1;
+        c.mesh.position.z = -1;
+        c.mesh.rotation.x = Math.PI / 2;
+        c.mesh.rotation.z = Math.PI / 2;
+        cubelets[18] = c;
 
         for (var cu of cubelets) {
             cu.mesh.scale.x = 0.95;
             cu.mesh.scale.y = 0.95;
             cu.mesh.scale.z = 0.95;
+
+            cu.mesh.updateMatrix();
+            cu.mesh.geometry.applyMatrix(cu.mesh.matrix);
+            cu.mesh.position.set(0, 0, 0);
+            cu.mesh.rotation.set(0, 0, 0);
+            // cu.mesh.scale.set(1, 1, 1);
+            cu.mesh.updateMatrix();
         }
 
         return cubelets;
