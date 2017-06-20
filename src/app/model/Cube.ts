@@ -20,10 +20,12 @@ export class Cube {
 
         var faceCubelets = this.getFace1Cubelets();
         var f: Face = new Face(faceCubelets);
+        f.root.rotateY(0.3);
         this.root.add(f.root);
 
         faceCubelets = this.getFace2Cubelets();
         f = new Face(faceCubelets);
+        // f.root.rotation.z = 0.3;
         this.root.add(f.root);
     }
 
@@ -52,6 +54,8 @@ export class Cube {
         faceCubelets.push(this.cubelets[5]);
         faceCubelets.push(this.cubelets[1]);
         faceCubelets.push(this.cubelets[8]);
+        faceCubelets.push(this.cubelets[10]);
+        faceCubelets.push(this.cubelets[11]);
 
         return faceCubelets;
     }
@@ -64,69 +68,83 @@ export class Cube {
         c.mesh.position.x = 0;
         c.mesh.position.y = 1;
         c.mesh.position.z = 0;
-        cubelets.push(c);
+        cubelets[0] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.GREEN);
         c.mesh.position.x = 0;
         c.mesh.position.y = 1;
         c.mesh.position.z = 1;
-        cubelets.push(c);
+        cubelets[1] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.BLUE);
         c.mesh.position.x = 0;
         c.mesh.position.y = 1;
         c.mesh.position.z = -1;
         c.mesh.rotation.y = Math.PI;
-        cubelets.push(c);
+        cubelets[2] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.ORANGE);
         c.mesh.position.x = -1;
         c.mesh.position.y = 1;
         c.mesh.position.z = 0;
         c.mesh.rotation.y = -Math.PI / 2;
-        cubelets.push(c);
+        cubelets[3] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.RED);
         c.mesh.position.x = 1;
         c.mesh.position.y = 1;
         c.mesh.position.z = 0;
         c.mesh.rotation.y = Math.PI / 2;
-        cubelets.push(c);
+        cubelets[4] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.GREEN, FaceColor.BLACK, FaceColor.BLACK, FaceColor.ORANGE);
         c.mesh.position.x = -1;
         c.mesh.position.y = 1;
         c.mesh.position.z = 1;
         c.mesh.rotation.y = 0;
-        cubelets.push(c);
+        cubelets[5] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.ORANGE, FaceColor.BLACK, FaceColor.BLACK, FaceColor.BLUE);
         c.mesh.position.x = -1;
         c.mesh.position.y = 1;
         c.mesh.position.z = -1;
         c.mesh.rotation.y = -Math.PI / 2;
-        cubelets.push(c);
+        cubelets[6] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.BLUE, FaceColor.BLACK, FaceColor.BLACK, FaceColor.RED);
         c.mesh.position.x = 1;
         c.mesh.position.y = 1;
         c.mesh.position.z = -1;
         c.mesh.rotation.y = Math.PI;
-        cubelets.push(c);
+        cubelets[7] = c;
 
         c = new Cubelet(FaceColor.WHITE, FaceColor.RED, FaceColor.BLACK, FaceColor.BLACK, FaceColor.GREEN);
         c.mesh.position.x = 1;
         c.mesh.position.y = 1;
         c.mesh.position.z = 1;
         c.mesh.rotation.y = Math.PI / 2;
-        cubelets.push(c);
+        cubelets[8] = c;
 
-        var c = new Cubelet(FaceColor.GREEN);
+        c = new Cubelet(FaceColor.GREEN);
         c.mesh.position.x = 0;
         c.mesh.position.y = 0;
         c.mesh.position.z = 1;
         c.mesh.rotation.x = Math.PI / 2;
-        cubelets.push(c);
+        cubelets[9] = c;
+
+        c = new Cubelet(FaceColor.RED, FaceColor.GREEN);
+        c.mesh.position.x = 1;
+        c.mesh.position.y = 0;
+        c.mesh.position.z = 1;
+        c.mesh.rotation.z = -Math.PI / 2;
+        cubelets[10] = c;
+
+        c = new Cubelet(FaceColor.ORANGE, FaceColor.GREEN);
+        c.mesh.position.x = -1;
+        c.mesh.position.y = 0;
+        c.mesh.position.z = 1;
+        c.mesh.rotation.z = Math.PI / 2;
+        cubelets[11] = c;
 
 
 
