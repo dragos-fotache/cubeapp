@@ -45,10 +45,11 @@ export class Graphics {
         this.cube = new Cube();
 
         this.cube.root.rotation.x = 0.5;
-        this.cube.root.rotation.y = 0.7;
+        this.cube.root.rotation.y = Math.PI/4;
 
-        this.cube.faces[0].rotateY(Math.PI /2);
-        this.cube.faces[1].rotateY(Math.PI /2);
+        this.cube.rotateFaceUp();
+        this.cube.rotateFaceRight();
+        this.cube.rotateFaceDown();
 
         this.scene.add(this.cube.root);
     }
