@@ -47,6 +47,9 @@ export class Graphics {
         this.cube.root.rotation.x = 0.5;
         this.cube.root.rotation.y = 0.7;
 
+        this.cube.faces[0].rotateY(Math.PI /2);
+        this.cube.faces[1].rotateY(Math.PI /2);
+
         this.scene.add(this.cube.root);
     }
 
@@ -59,8 +62,9 @@ export class Graphics {
     }
 
     public update() {
-        // this.cube.faces[2].rotateX(0.01);
-        this.cube.root.rotateY(0.01);
+        // this.cube.faces[3].rotateZ(0.01);
+        // this.cube.root.rotateY(0.01);
+        // this.cube.root.rotateX(0.01);
     }
 
 }
