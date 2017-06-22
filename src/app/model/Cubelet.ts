@@ -86,8 +86,9 @@ export class Cubelet {
 
     }
 
-    rotateY() {
-        this.mesh.rotateY(-Math.PI / 2);this.normalize();
+    rotateY_CW() {
+        this.mesh.rotateY(-Math.PI / 2);
+        this.normalize();
         var front = this.front;
         var left = this.left;
         var back = this.back;
@@ -99,8 +100,9 @@ export class Cubelet {
         this.right = back;
     }
 
-    rotateYi() {
-        this.mesh.rotateY(Math.PI / 2);this.normalize();
+    rotateY_CCW() {
+        this.mesh.rotateY(Math.PI / 2);
+        this.normalize();
         var front = this.front;
         var left = this.left;
         var back = this.back;
@@ -112,8 +114,9 @@ export class Cubelet {
         this.right = front;
     }
 
-    rotateX() {
-        this.mesh.rotateX(-Math.PI / 2);this.normalize();
+    rotateX_CW() {
+        this.mesh.rotateX(-Math.PI / 2);
+        this.normalize();
         var front = this.front;
         var up = this.up;
         var back = this.back;
@@ -125,8 +128,9 @@ export class Cubelet {
         this.down = back;
     }
 
-    rotateXi() {
-        this.mesh.rotateX(Math.PI / 2);this.normalize();
+    rotateX_CCW() {
+        this.mesh.rotateX(Math.PI / 2);
+        this.normalize();
         var front = this.front;
         var up = this.up;
         var back = this.back;
@@ -136,6 +140,34 @@ export class Cubelet {
         this.up = back;
         this.back = down;
         this.down = front;
+    }
+
+    rotateZ_CW() {
+        this.mesh.rotateZ(-Math.PI / 2);
+        this.normalize();
+        var left = this.left;
+        var up = this.up;
+        var down = this.down;
+        var right = this.right;
+
+        this.right = up;
+        this.up = left;
+        this.left = down;
+        this.down = right;
+    }
+
+    rotateZ_CCW() {
+        this.mesh.rotateZ(Math.PI / 2);
+        this.normalize();
+        var left = this.left;
+        var up = this.up;
+        var down = this.down;
+        var right = this.right;
+
+        this.right = down;
+        this.up = right;
+        this.left = up;
+        this.down = left;
     }
 
 }

@@ -27,7 +27,7 @@ export class Cube {
     rotateFaceUp() {
         for (var c of this.cubelets) {
             if (c.up != FaceColor.BLACK) {
-                c.rotateY();
+                c.rotateY_CW();
             }
         }
     }
@@ -35,7 +35,7 @@ export class Cube {
     rotateFaceUpi() {
         for (var c of this.cubelets) {
             if (c.up != FaceColor.BLACK) {
-                c.rotateYi();
+                c.rotateY_CCW();
             }
         }
     }
@@ -43,7 +43,7 @@ export class Cube {
     rotateFaceDown() {
         for (var c of this.cubelets) {
             if (c.down != FaceColor.BLACK) {
-                c.rotateYi();
+                c.rotateY_CCW();
             }
         }
     }
@@ -51,7 +51,7 @@ export class Cube {
     rotateFaceDowni() {
         for (var c of this.cubelets) {
             if (c.down != FaceColor.BLACK) {
-                c.rotateY();
+                c.rotateY_CW();
             }
         }
     }
@@ -59,7 +59,7 @@ export class Cube {
     rotateFaceRight() {
         for (var c of this.cubelets) {
             if (c.right != FaceColor.BLACK) {
-                c.rotateX();
+                c.rotateX_CW();
             }
         }
     }
@@ -67,7 +67,7 @@ export class Cube {
     rotateFaceRighti() {
         for (var c of this.cubelets) {
             if (c.right != FaceColor.BLACK) {
-                c.rotateXi();
+                c.rotateX_CCW();
             }
         }
     }
@@ -75,7 +75,7 @@ export class Cube {
     rotateFaceLeft() {
         for (var c of this.cubelets) {
             if (c.left != FaceColor.BLACK) {
-                c.rotateXi();
+                c.rotateX_CCW();
             }
         }
     }
@@ -83,7 +83,39 @@ export class Cube {
     rotateFaceLefti() {
         for (var c of this.cubelets) {
             if (c.left != FaceColor.BLACK) {
-                c.rotateX();
+                c.rotateX_CW;
+            }
+        }
+    }
+
+    rotateFaceFront() {
+        for (var c of this.cubelets) {
+            if (c.front != FaceColor.BLACK) {
+                c.rotateZ_CW();
+            }
+        }
+    }
+
+    rotateFaceFronti() {
+        for (var c of this.cubelets) {
+            if (c.front != FaceColor.BLACK) {
+                c.rotateZ_CCW();
+            }
+        }
+    }
+
+    rotateFaceBack() {
+        for (var c of this.cubelets) {
+            if (c.front != FaceColor.BLACK) {
+                c.rotateZ_CCW();
+            }
+        }
+    }
+
+    rotateFaceBacki() {
+        for (var c of this.cubelets) {
+            if (c.front != FaceColor.BLACK) {
+                c.rotateZ_CW();
             }
         }
     }

@@ -50,6 +50,7 @@ export class Graphics {
         this.cube.rotateFaceUp();
         this.cube.rotateFaceRight();
         this.cube.rotateFaceDown();
+        this.cube.rotateFaceFront();
 
         this.scene.add(this.cube.root);
     }
@@ -62,9 +63,11 @@ export class Graphics {
         this.renderer.render(this.scene, this.camera);
     }
 
-    public update() {
+    public update(buttonWasClicked: boolean) {
         // this.cube.faces[3].rotateZ(0.01);
-        // this.cube.root.rotateY(0.01);
+        if (buttonWasClicked) {
+            this.cube.root.rotateY(0.01);
+        }
         // this.cube.root.rotateX(0.01);
     }
 
