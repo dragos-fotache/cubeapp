@@ -45,7 +45,7 @@ export class Cubelet {
 
     }
 
-    private normalize() {
+    public normalize() {
         this.mesh.updateMatrix();
         this.mesh.geometry.applyMatrix(this.mesh.matrix);
         this.mesh.position.set(0, 0, 0);
@@ -87,8 +87,8 @@ export class Cubelet {
     }
 
     rotateY_CW() {
-        this.mesh.rotateY(-Math.PI / 2);
-        this.normalize();
+        // this.mesh.rotateY(-Math.PI / 2);
+        // this.normalize();
         var front = this.front;
         var left = this.left;
         var back = this.back;
@@ -101,8 +101,8 @@ export class Cubelet {
     }
 
     rotateY_CCW() {
-        this.mesh.rotateY(Math.PI / 2);
-        this.normalize();
+        // this.mesh.rotateY(Math.PI / 2);
+        // this.normalize();
         var front = this.front;
         var left = this.left;
         var back = this.back;
@@ -115,8 +115,8 @@ export class Cubelet {
     }
 
     rotateX_CW() {
-        this.mesh.rotateX(-Math.PI / 2);
-        this.normalize();
+        // this.mesh.rotateX(-Math.PI / 2);
+        // this.normalize();
         var front = this.front;
         var up = this.up;
         var back = this.back;
@@ -129,8 +129,8 @@ export class Cubelet {
     }
 
     rotateX_CCW() {
-        this.mesh.rotateX(Math.PI / 2);
-        this.normalize();
+        // this.mesh.rotateX(Math.PI / 2);
+        // this.normalize();
         var front = this.front;
         var up = this.up;
         var back = this.back;
@@ -143,8 +143,8 @@ export class Cubelet {
     }
 
     rotateZ_CW() {
-        this.mesh.rotateZ(-Math.PI / 2);
-        this.normalize();
+        // this.mesh.rotateZ(-Math.PI / 2);
+        // this.normalize();
         var left = this.left;
         var up = this.up;
         var down = this.down;
@@ -157,8 +157,8 @@ export class Cubelet {
     }
 
     rotateZ_CCW() {
-        this.mesh.rotateZ(Math.PI / 2);
-        this.normalize();
+        // this.mesh.rotateZ(Math.PI / 2);
+        // this.normalize();
         var left = this.left;
         var up = this.up;
         var down = this.down;

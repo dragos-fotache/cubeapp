@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { Cubelet } from './Cubelet';
-import { Cube } from './Cube';
+import { Cube, CubeState } from './Cube';
 import { FaceColor } from "./FaceColor";
 
 export class Graphics {
@@ -11,7 +11,7 @@ export class Graphics {
 
     private cube: Cube;
 
-    private FOV = 75;
+    private FOV = 60;
     private WIDTH = 500;
     private HEIGHT = 500;
     private NEAR = 0.1;
@@ -19,7 +19,7 @@ export class Graphics {
 
     constructor() {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xffffff);
+        this.scene.background = new THREE.Color(0xcccccc);
         this.camera = new THREE.PerspectiveCamera(this.FOV,
             this.WIDTH / this.HEIGHT,
             this.NEAR,
@@ -40,17 +40,17 @@ export class Graphics {
         this.scene.add(light);
         this.scene.add(ambientLight);
 
-        this.camera.position.z = 5;
+        this.camera.position.z = 8;
 
         this.cube = new Cube();
 
         this.cube.root.rotation.x = 0.5;
         this.cube.root.rotation.y = Math.PI/4;
 
-        this.cube.rotateFaceUp();
-        this.cube.rotateFaceRight();
-        this.cube.rotateFaceDown();
-        this.cube.rotateFaceFront();
+        // this.cube.logicRotateFaceUp();
+        // this.cube.logicRotateFaceRight();
+        // this.cube.logicRotateFaceDown();
+        // this.cube.logicRotateFaceFront();
 
         this.scene.add(this.cube.root);
     }
@@ -63,12 +63,40 @@ export class Graphics {
         this.renderer.render(this.scene, this.camera);
     }
 
-    public update(buttonWasClicked: boolean) {
-        // this.cube.faces[3].rotateZ(0.01);
-        if (buttonWasClicked) {
-            this.cube.root.rotateY(0.01);
+    public update(delta: number) {
+        if (this.cube.state == CubeState.MOVING_UP) {
+            this.cube.rotateFaceUp(delta);
+        } else if (this.cube.state == CubeState.MOVING_UP_I) {
+            this.cube.rotateFaceUpi(delta);
+        } else if (this.cube.state == CubeState.MOVING_RIGHT) {
+            this.cube.rotateFaceRight(delta);
+        } else if (this.cube.state == CubeState.MOVING_RIGHT_I) {
+            this.cube.rotateFaceRighti(delta);
         }
-        // this.cube.root.rotateX(0.01);
+    }
+
+    public startRotationUp() {
+        if (this.cube.state == CubeState.NOT_MOVING) {
+            this.cube.state = CubeState.MOVING_UP;
+        }
+    }
+
+    public startRotationUpi() {
+        if (this.cube.state == CubeState.NOT_MOVING) {
+            this.cube.state = CubeState.MOVING_UP_I;
+        }
+    }
+
+    public startRotationRight() {
+        if (this.cube.state == CubeState.NOT_MOVING) {
+            this.cube.state = CubeState.MOVING_RIGHT;
+        }
+    }
+
+    public startRotationRighti() {
+        if (this.cube.state == CubeState.NOT_MOVING) {
+            this.cube.state = CubeState.MOVING_RIGHT_I;
+        }
     }
 
 }

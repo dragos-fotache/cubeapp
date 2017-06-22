@@ -14,14 +14,8 @@ import { Graphics } from './model/Graphics';
     styleUrls: ['./graphics.component.css']
 })
 export class GraphicsComponent implements OnInit {
-    @ViewChild('myCanvas') 
+    @ViewChild('myCanvas')
     canvasRef: ElementRef;
-
-    @Input()
-    buttonWasClicked: boolean;
-
-    @Output()
-    movementEnded = new EventEmitter();
 
     private lastUpdate;
 
@@ -31,7 +25,6 @@ export class GraphicsComponent implements OnInit {
     }
 
     ngOnInit() {
-
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
                 console.log("hidden");
@@ -46,16 +39,35 @@ export class GraphicsComponent implements OnInit {
         this.graphics = new Graphics();
 
         this.graphics.hookRenderer(this.canvasRef.nativeElement);
-        
+
         this.ngZone.runOutsideAngular(() => this.paint());
+    }
+
+    public startAction(action: string) {
+        switch (action) {
+            case "up":
+                this.graphics.startRotationUp()
+                break;
+            case "upi":
+                this.graphics.startRotationUpi()
+                break;
+            case "right":
+                this.graphics.startRotationRight()
+                break;
+            case "righti":
+                this.graphics.startRotationRighti()
+                break;
+            default:
+                break;
+        }
     }
 
     private paint() {
         var now = Date.now();
-        var dt = now - this.lastUpdate;
+        var delta = now - this.lastUpdate;
         this.lastUpdate = now;
 
-        this.graphics.update(this.buttonWasClicked);
+        this.graphics.update(delta);
         this.graphics.render();
 
         requestAnimationFrame(() => this.paint());

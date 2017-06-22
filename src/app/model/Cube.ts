@@ -9,7 +9,14 @@ export class Cube {
 
     public root: THREE.Group;
 
+    public state: CubeState = CubeState.NOT_MOVING;
+
     private cubelets: Array<Cubelet>;
+
+    private ROTATION_SPEED = 1; //in seconds
+
+    private totalRotation = 0;
+
 
     constructor() {
         this.root = new THREE.Group();
@@ -21,10 +28,101 @@ export class Cube {
         for (var c of this.cubelets) {
             this.root.add(c.mesh);
         }
-
     }
 
-    rotateFaceUp() {
+    rotateFaceUp(delta: number) {
+        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
+        this.totalRotation += t;
+
+        if (this.totalRotation >= Math.PI / 2) {
+            this.totalRotation = 0;
+            this.state = CubeState.NOT_MOVING;
+            for (var c of this.cubelets) {
+                if (c.up != FaceColor.BLACK) {
+                    c.mesh.rotation.y = -Math.PI / 2;
+                    c.normalize();
+                }
+            }
+            this.logicRotateFaceUp();
+        } else {
+            for (var c of this.cubelets) {
+                if (c.up != FaceColor.BLACK) {
+                    c.mesh.rotateY(-t);
+                }
+            }
+        }
+    }
+
+    rotateFaceUpi(delta: number) {
+        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
+        this.totalRotation += t;
+
+        if (this.totalRotation >= Math.PI / 2) {
+            this.totalRotation = 0;
+            this.state = CubeState.NOT_MOVING;
+            for (var c of this.cubelets) {
+                if (c.up != FaceColor.BLACK) {
+                    c.mesh.rotation.y = Math.PI / 2;
+                    c.normalize();
+                }
+            }
+            this.logicRotateFaceUpi();
+        } else {
+            for (var c of this.cubelets) {
+                if (c.up != FaceColor.BLACK) {
+                    c.mesh.rotateY(t);
+                }
+            }
+        }
+    }
+
+    rotateFaceRight(delta: number) {
+        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
+        this.totalRotation += t;
+
+        if (this.totalRotation >= Math.PI / 2) {
+            this.totalRotation = 0;
+            this.state = CubeState.NOT_MOVING;
+            for (var c of this.cubelets) {
+                if (c.right != FaceColor.BLACK) {
+                    c.mesh.rotation.x = -Math.PI / 2;
+                    c.normalize();
+                }
+            }
+            this.logicRotateFaceRight();
+        } else {
+            for (var c of this.cubelets) {
+                if (c.right != FaceColor.BLACK) {
+                    c.mesh.rotateX(-t);
+                }
+            }
+        }
+    }
+
+    rotateFaceRighti(delta: number) {
+        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
+        this.totalRotation += t;
+
+        if (this.totalRotation >= Math.PI / 2) {
+            this.totalRotation = 0;
+            this.state = CubeState.NOT_MOVING;
+            for (var c of this.cubelets) {
+                if (c.right != FaceColor.BLACK) {
+                    c.mesh.rotation.x = Math.PI / 2;
+                    c.normalize();
+                }
+            }
+            this.logicRotateFaceRighti();
+        } else {
+            for (var c of this.cubelets) {
+                if (c.right != FaceColor.BLACK) {
+                    c.mesh.rotateX(t);
+                }
+            }
+        }
+    }
+
+    logicRotateFaceUp() {
         for (var c of this.cubelets) {
             if (c.up != FaceColor.BLACK) {
                 c.rotateY_CW();
@@ -32,7 +130,7 @@ export class Cube {
         }
     }
 
-    rotateFaceUpi() {
+    logicRotateFaceUpi() {
         for (var c of this.cubelets) {
             if (c.up != FaceColor.BLACK) {
                 c.rotateY_CCW();
@@ -40,7 +138,7 @@ export class Cube {
         }
     }
 
-    rotateFaceDown() {
+    logicRotateFaceDown() {
         for (var c of this.cubelets) {
             if (c.down != FaceColor.BLACK) {
                 c.rotateY_CCW();
@@ -48,7 +146,7 @@ export class Cube {
         }
     }
 
-    rotateFaceDowni() {
+    logicRotateFaceDowni() {
         for (var c of this.cubelets) {
             if (c.down != FaceColor.BLACK) {
                 c.rotateY_CW();
@@ -56,7 +154,7 @@ export class Cube {
         }
     }
 
-    rotateFaceRight() {
+    logicRotateFaceRight() {
         for (var c of this.cubelets) {
             if (c.right != FaceColor.BLACK) {
                 c.rotateX_CW();
@@ -64,7 +162,7 @@ export class Cube {
         }
     }
 
-    rotateFaceRighti() {
+    logicRotateFaceRighti() {
         for (var c of this.cubelets) {
             if (c.right != FaceColor.BLACK) {
                 c.rotateX_CCW();
@@ -72,7 +170,7 @@ export class Cube {
         }
     }
 
-    rotateFaceLeft() {
+    logicRotateFaceLeft() {
         for (var c of this.cubelets) {
             if (c.left != FaceColor.BLACK) {
                 c.rotateX_CCW();
@@ -80,7 +178,7 @@ export class Cube {
         }
     }
 
-    rotateFaceLefti() {
+    logicRotateFaceLefti() {
         for (var c of this.cubelets) {
             if (c.left != FaceColor.BLACK) {
                 c.rotateX_CW;
@@ -88,7 +186,7 @@ export class Cube {
         }
     }
 
-    rotateFaceFront() {
+    logicRotateFaceFront() {
         for (var c of this.cubelets) {
             if (c.front != FaceColor.BLACK) {
                 c.rotateZ_CW();
@@ -96,7 +194,7 @@ export class Cube {
         }
     }
 
-    rotateFaceFronti() {
+    logicRotateFaceFronti() {
         for (var c of this.cubelets) {
             if (c.front != FaceColor.BLACK) {
                 c.rotateZ_CCW();
@@ -104,7 +202,7 @@ export class Cube {
         }
     }
 
-    rotateFaceBack() {
+    logicRotateFaceBack() {
         for (var c of this.cubelets) {
             if (c.front != FaceColor.BLACK) {
                 c.rotateZ_CCW();
@@ -112,7 +210,7 @@ export class Cube {
         }
     }
 
-    rotateFaceBacki() {
+    logicRotateFaceBacki() {
         for (var c of this.cubelets) {
             if (c.front != FaceColor.BLACK) {
                 c.rotateZ_CW();
@@ -138,4 +236,12 @@ export class Cube {
 
         return cubelets;
     }
+}
+
+export enum CubeState {
+    NOT_MOVING,
+    MOVING_UP,
+    MOVING_UP_I,
+    MOVING_RIGHT,
+    MOVING_RIGHT_I
 }
