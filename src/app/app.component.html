@@ -1,11 +1,37 @@
 <div>
-  
+
   <graphics #graphics></graphics>
-  <button (click)="commandUp()">up</button>
-  <button (click)="commandUpi()">upi</button>
-  <button (click)="commandRight()">right</button>
-  <button (click)="commandRighti()">righti</button>
+  <div>
+    <button (click)="doCommand('UP')">U</button>
+    <button (click)="doCommand('UP_I')">U'</button>
+    <button (click)="doCommand('DOWN')">D</button>
+    <button (click)="doCommand('DOWN_I')">D'</button>
+    <button (click)="doCommand('RIGHT')">R</button>
+    <button (click)="doCommand('RIGHT_I')">R'</button>
+    <button (click)="doCommand('LEFT')">L</button>
+    <button (click)="doCommand('LEFT_I')">L'</button>
+    <button (click)="doCommand('FRONT')">F</button>
+    <button (click)="doCommand('FRONT_I')">F'</button>
+    <button (click)="doCommand('BACK')">B</button>
+    <button (click)="doCommand('BACK_I')">B'</button>
+  </div>
+  <br/>
+  <div>
+    <button (click)="doCommand('MIDDLE')">M</button>
+    <button (click)="doCommand('MIDDLE_I')">M'</button>
+    <button (click)="doCommand('EQUATORIAL')">E</button>
+    <button (click)="doCommand('EQUATORIAL_I')">E'</button>
+    <button (click)="doCommand('STANDING')">S</button>
+    <button (click)="doCommand('STANDING_I')">S'</button>
+  </div>
+  <br/>
+  <div>
+    <button (click)="doCommand('ROTX')">X</button>
+    <button (click)="doCommand('ROTX_I')">X'</button>
+    <button (click)="doCommand('ROTY')">Y</button>
+    <button (click)="doCommand('ROTY_I')">Y'</button>
+    <button (click)="doCommand('ROTZ')">Z</button>
+    <button (click)="doCommand('ROTZ_I')">Z'</button>
+  </div>
 
 </div>
-
-

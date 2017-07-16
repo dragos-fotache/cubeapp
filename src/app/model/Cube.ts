@@ -1,6 +1,9 @@
-import { Cubelet } from './Cubelet';
+import { Cubelet, Axes } from './Cubelet';
 import { Face } from './Face';
 import { FaceColor } from './FaceColor';
+import { CubeSlice } from './CubeFace';
+import { CubeState } from './CubeState';
+import { Graphics } from './Graphics';
 
 import * as THREE from 'three';
 
@@ -11,214 +14,110 @@ export class Cube {
 
     public state: CubeState = CubeState.NOT_MOVING;
 
-    private cubelets: Array<Cubelet>;
+    public cubelets: Array<Cubelet>;
 
-    private ROTATION_SPEED = 1; //in seconds
+    private ROTATION_SPEED = 0.5; //in seconds
 
     private totalRotation = 0;
 
-
-    constructor() {
+    constructor(meshes: THREE.Mesh[]) {
         this.root = new THREE.Group();
 
         this.faces = new Array<Face>();
 
-        this.cubelets = this.createAllCubelets();
-
+        this.cubelets = this.createAllCubelets(meshes);
         for (var c of this.cubelets) {
             this.root.add(c.mesh);
         }
     }
 
-    rotateFaceUp(delta: number) {
-        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
+    rotateFaceUpdate(state: CubeState, delta: number) {
+        var t = (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
         this.totalRotation += t;
+
+        var faceIsNormal = state.face.normal ? 1 : -1;
+        var factorInverted = state.inverted ? 1 : -1;
+        var factor = faceIsNormal * factorInverted;
+        t = factor * t;
+        var rightAngle = factor * Math.PI / 2;
+
+        var cubs: Array<Cubelet> = this.getFace(state.face);
 
         if (this.totalRotation >= Math.PI / 2) {
             this.totalRotation = 0;
             this.state = CubeState.NOT_MOVING;
-            for (var c of this.cubelets) {
-                if (c.up != FaceColor.BLACK) {
-                    c.mesh.rotation.y = -Math.PI / 2;
-                    c.normalize();
-                }
-            }
-            this.logicRotateFaceUp();
-        } else {
-            for (var c of this.cubelets) {
-                if (c.up != FaceColor.BLACK) {
-                    c.mesh.rotateY(-t);
-                }
-            }
-        }
-    }
 
-    rotateFaceUpi(delta: number) {
-        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
-        this.totalRotation += t;
-
-        if (this.totalRotation >= Math.PI / 2) {
-            this.totalRotation = 0;
-            this.state = CubeState.NOT_MOVING;
-            for (var c of this.cubelets) {
-                if (c.up != FaceColor.BLACK) {
-                    c.mesh.rotation.y = Math.PI / 2;
-                    c.normalize();
+            for (var c of cubs) {
+                if (state.face.axis == Axes.Y) {
+                    c.mesh.rotation.y = rightAngle;
+                } else if (state.face.axis == Axes.X) {
+                    c.mesh.rotation.x = rightAngle
+                } else if (state.face.axis == Axes.Z) {
+                    c.mesh.rotation.z = rightAngle;
                 }
+                // Graphics.normalize(c.mesh);
             }
-            this.logicRotateFaceUpi();
+            this.logicRotateFace(state.face, state.inverted);
         } else {
-            for (var c of this.cubelets) {
-                if (c.up != FaceColor.BLACK) {
+            for (var c of cubs) {
+                if (state.face.axis == Axes.Y) {
                     c.mesh.rotateY(t);
-                }
-            }
-        }
-    }
-
-    rotateFaceRight(delta: number) {
-        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
-        this.totalRotation += t;
-
-        if (this.totalRotation >= Math.PI / 2) {
-            this.totalRotation = 0;
-            this.state = CubeState.NOT_MOVING;
-            for (var c of this.cubelets) {
-                if (c.right != FaceColor.BLACK) {
-                    c.mesh.rotation.x = -Math.PI / 2;
-                    c.normalize();
-                }
-            }
-            this.logicRotateFaceRight();
-        } else {
-            for (var c of this.cubelets) {
-                if (c.right != FaceColor.BLACK) {
-                    c.mesh.rotateX(-t);
-                }
-            }
-        }
-    }
-
-    rotateFaceRighti(delta: number) {
-        var t =  (Math.PI / 2) * (delta / (this.ROTATION_SPEED * 1000));
-        this.totalRotation += t;
-
-        if (this.totalRotation >= Math.PI / 2) {
-            this.totalRotation = 0;
-            this.state = CubeState.NOT_MOVING;
-            for (var c of this.cubelets) {
-                if (c.right != FaceColor.BLACK) {
-                    c.mesh.rotation.x = Math.PI / 2;
-                    c.normalize();
-                }
-            }
-            this.logicRotateFaceRighti();
-        } else {
-            for (var c of this.cubelets) {
-                if (c.right != FaceColor.BLACK) {
+                } else if (state.face.axis == Axes.X) {
                     c.mesh.rotateX(t);
+                } else if (state.face.axis == Axes.Z) {
+                    c.mesh.rotateZ(t);
                 }
             }
         }
     }
 
-    logicRotateFaceUp() {
-        for (var c of this.cubelets) {
-            if (c.up != FaceColor.BLACK) {
-                c.rotateY_CW();
+    rotateFace(state: CubeState) {
+        var faceIsNormal = state.face.normal ? 1 : -1;
+        var factorInverted = state.inverted ? 1 : -1;
+        var factor = faceIsNormal * factorInverted;
+        var t = factor * Math.PI / 2;
+
+        var cubs: Array<Cubelet> = this.getFace(state.face);
+
+        for (var c of cubs) {
+            if (state.face.axis == Axes.Y) {
+                c.mesh.rotation.y = t;
+            } else if (state.face.axis == Axes.X) {
+                c.mesh.rotation.x = t
+            } else if (state.face.axis == Axes.Z) {
+                c.mesh.rotation.z = t;
             }
+            // Graphics.normalize(c.mesh);
+        }
+        this.logicRotateFace(state.face, state.inverted);
+
+    }
+
+    logicRotateFace(face: CubeSlice, inverted: boolean) {
+        var ccw: boolean;
+
+        if (face.normal) {
+            if (!inverted) {
+                ccw = false;
+            } else {
+                ccw = true;
+            }
+        } else {
+            if (!inverted) {
+                ccw = true;
+            } else {
+                ccw = false;
+            }
+        }
+
+        var cubs: Array<Cubelet> = this.getFace(face);
+
+        for (var c of cubs) {
+            c.rotate(face.axis, ccw);
         }
     }
 
-    logicRotateFaceUpi() {
-        for (var c of this.cubelets) {
-            if (c.up != FaceColor.BLACK) {
-                c.rotateY_CCW();
-            }
-        }
-    }
-
-    logicRotateFaceDown() {
-        for (var c of this.cubelets) {
-            if (c.down != FaceColor.BLACK) {
-                c.rotateY_CCW();
-            }
-        }
-    }
-
-    logicRotateFaceDowni() {
-        for (var c of this.cubelets) {
-            if (c.down != FaceColor.BLACK) {
-                c.rotateY_CW();
-            }
-        }
-    }
-
-    logicRotateFaceRight() {
-        for (var c of this.cubelets) {
-            if (c.right != FaceColor.BLACK) {
-                c.rotateX_CW();
-            }
-        }
-    }
-
-    logicRotateFaceRighti() {
-        for (var c of this.cubelets) {
-            if (c.right != FaceColor.BLACK) {
-                c.rotateX_CCW();
-            }
-        }
-    }
-
-    logicRotateFaceLeft() {
-        for (var c of this.cubelets) {
-            if (c.left != FaceColor.BLACK) {
-                c.rotateX_CCW();
-            }
-        }
-    }
-
-    logicRotateFaceLefti() {
-        for (var c of this.cubelets) {
-            if (c.left != FaceColor.BLACK) {
-                c.rotateX_CW;
-            }
-        }
-    }
-
-    logicRotateFaceFront() {
-        for (var c of this.cubelets) {
-            if (c.front != FaceColor.BLACK) {
-                c.rotateZ_CW();
-            }
-        }
-    }
-
-    logicRotateFaceFronti() {
-        for (var c of this.cubelets) {
-            if (c.front != FaceColor.BLACK) {
-                c.rotateZ_CCW();
-            }
-        }
-    }
-
-    logicRotateFaceBack() {
-        for (var c of this.cubelets) {
-            if (c.front != FaceColor.BLACK) {
-                c.rotateZ_CCW();
-            }
-        }
-    }
-
-    logicRotateFaceBacki() {
-        for (var c of this.cubelets) {
-            if (c.front != FaceColor.BLACK) {
-                c.rotateZ_CW();
-            }
-        }
-    }
-
-    private createAllCubelets(): Array<Cubelet> {
+    private createAllCubelets(meshes: THREE.Mesh[]): Array<Cubelet> {
 
         var cubelets = new Array<Cubelet>();
 
@@ -228,7 +127,8 @@ export class Cube {
             for (var j of coords) {
                 for (var k of coords) {
                     if (i != 0 || j != 0 || k != 0) {
-                        cubelets.push(new Cubelet(i, j, k));
+                        var name = 'cubelet_' + i + '_' + j + '_' + k;
+                        cubelets.push(new Cubelet(i, j, k, meshes));
                     }
                 }
             }
@@ -236,12 +136,37 @@ export class Cube {
 
         return cubelets;
     }
-}
 
-export enum CubeState {
-    NOT_MOVING,
-    MOVING_UP,
-    MOVING_UP_I,
-    MOVING_RIGHT,
-    MOVING_RIGHT_I
+    public getFace(face: CubeSlice): Array<Cubelet> {
+        var result: Array<Cubelet> = new Array<Cubelet>();
+
+        if (face == CubeSlice.MIDDLE) {
+            for (var c of this.cubelets) {
+                if (c[CubeSlice.RIGHT.name] == FaceColor.BLACK && c[CubeSlice.LEFT.name] == FaceColor.BLACK) {
+                    result.push(c);
+                }
+            }
+        } else if (face == CubeSlice.EQUATORIAL) {
+            for (var c of this.cubelets) {
+                if (c[CubeSlice.UP.name] == FaceColor.BLACK && c[CubeSlice.DOWN.name] == FaceColor.BLACK) {
+                    result.push(c);
+                }
+            }
+        } else if (face == CubeSlice.STANDING) {
+            for (var c of this.cubelets) {
+                if (c[CubeSlice.FRONT.name] == FaceColor.BLACK && c[CubeSlice.BACK.name] == FaceColor.BLACK) {
+                    result.push(c);
+                }
+            }
+        } else {
+            for (var c of this.cubelets) {
+                if (c[face.name] != FaceColor.BLACK) {
+                    result.push(c);
+                }
+            }
+        }
+
+        return result;
+    }
+
 }

@@ -15,16 +15,8 @@ export class AppComponent {
 
     title = 'app';
 
-    commandUp() {
-        this.graphics.startAction('up');
+    doCommand(command: string) {
+        this.graphics.startAction(command);
     }
-    commandUpi() {
-        this.graphics.startAction('upi');
-    }
-    commandRight() {
-        this.graphics.startAction('right');
-    }
-    commandRighti() {
-        this.graphics.startAction('righti');
-    }
+   
 }

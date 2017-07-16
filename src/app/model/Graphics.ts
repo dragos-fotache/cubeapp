@@ -1,8 +1,12 @@
 import * as THREE from 'three';
 
 import { Cubelet } from './Cubelet';
-import { Cube, CubeState } from './Cube';
+import { Cube } from './Cube';
+import { CubeState } from './CubeState';
+import { CubeSlice } from './CubeFace';
 import { FaceColor } from "./FaceColor";
+
+import * as ColladaLoader from 'three-collada-loader';
 
 export class Graphics {
     private scene: THREE.Scene;
@@ -17,14 +21,14 @@ export class Graphics {
     private NEAR = 0.1;
     private FAR = 1000;
 
-    constructor() {
+    constructor(meshes: THREE.Mesh[]) {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xcccccc);
         this.camera = new THREE.PerspectiveCamera(this.FOV,
             this.WIDTH / this.HEIGHT,
             this.NEAR,
             this.FAR);
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
 
         this.renderer.setSize(this.WIDTH, this.HEIGHT);
 
@@ -42,17 +46,22 @@ export class Graphics {
 
         this.camera.position.z = 8;
 
-        this.cube = new Cube();
+        this.cube = new Cube(meshes);
 
         this.cube.root.rotation.x = 0.5;
-        this.cube.root.rotation.y = Math.PI/4;
+        this.cube.root.rotation.y = Math.PI / 4;
 
-        // this.cube.logicRotateFaceUp();
-        // this.cube.logicRotateFaceRight();
-        // this.cube.logicRotateFaceDown();
-        // this.cube.logicRotateFaceFront();
+        // this.cube.rotateFace(CubeState.UP);
+        // this.cube.rotateFace(CubeState.RIGHT);
+        // this.cube.rotateFace(CubeState.DOWN);
 
         this.scene.add(this.cube.root);
+
+        // for (var m of this.cube.cubelets) {
+        //     m.mesh.position.x = m.i;
+        // }
+
+        console.log(this.cube.cubelets);
     }
 
     public hookRenderer(nativeElement: any) {
@@ -64,39 +73,31 @@ export class Graphics {
     }
 
     public update(delta: number) {
-        if (this.cube.state == CubeState.MOVING_UP) {
-            this.cube.rotateFaceUp(delta);
-        } else if (this.cube.state == CubeState.MOVING_UP_I) {
-            this.cube.rotateFaceUpi(delta);
-        } else if (this.cube.state == CubeState.MOVING_RIGHT) {
-            this.cube.rotateFaceRight(delta);
-        } else if (this.cube.state == CubeState.MOVING_RIGHT_I) {
-            this.cube.rotateFaceRighti(delta);
+
+        var cubs: Cubelet[] = this.cube.getFace(CubeSlice.UP);
+
+        for (var c of cubs) {
+            c.mesh.position.x += 0.01;
+        }
+
+        if (this.cube.state != CubeState.NOT_MOVING) {
+            this.cube.rotateFaceUpdate(this.cube.state, delta);
         }
     }
 
-    public startRotationUp() {
+    public startRotation(rtype: string) {
         if (this.cube.state == CubeState.NOT_MOVING) {
-            this.cube.state = CubeState.MOVING_UP;
+            this.cube.state = CubeState[rtype];
         }
     }
 
-    public startRotationUpi() {
-        if (this.cube.state == CubeState.NOT_MOVING) {
-            this.cube.state = CubeState.MOVING_UP_I;
-        }
-    }
-
-    public startRotationRight() {
-        if (this.cube.state == CubeState.NOT_MOVING) {
-            this.cube.state = CubeState.MOVING_RIGHT;
-        }
-    }
-
-    public startRotationRighti() {
-        if (this.cube.state == CubeState.NOT_MOVING) {
-            this.cube.state = CubeState.MOVING_RIGHT_I;
-        }
-    }
+    // public static normalize(mesh: THREE.Mesh) {
+    //     mesh.updateMatrix();
+    //     mesh.applyMatrix(mesh.matrix);
+    //     mesh.position.set(0, 0, 0);
+    //     mesh.rotation.set(0, 0, 0);
+    //     mesh.scale.set(1, 1, 1);
+    //     mesh.updateMatrix();
+    // }
 
 }
